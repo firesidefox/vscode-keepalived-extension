@@ -1,0 +1,84 @@
+{
+	"name": "vscode-keepalivedconf-extension",
+	"displayName": "vscode-keepalivedconf-extension",
+	"description": "keepalived.conf IntelliSense",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.38.0"
+	},
+	"categories": [
+		"Snippets",
+		"Programming Languages"
+	],
+	"main": "./src/extension.js",
+	"activationEvents": [
+		"onLanguage:keepalivedconf",
+		"onCommand:extension.sync"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "keepalivedconf",
+				"aliases": [ "KEEPALIVEDCONF"
+				],
+				"extensions": [
+					".conf"
+				],
+				"filenames": [
+					"keepalived"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"commands": [
+			{
+				"command": "extension.sync",
+				"title": "Sync keepalived manpage"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "editorLangId == keepalivedconf",
+					"command": "extension.sync",
+					"alt": "extension.sync",
+					"group": "navigation"
+				}
+			]
+		},
+		"keybindings": [{
+			"command": "extension.sync",
+			"key": "ctrl+alt+0",
+			"mac": "cmd++alt+0",
+			"when": "editorTextFocus"
+		}],
+		"configuration": {
+			"title": "keepalivedconf",
+			"properties": {
+				"keepalivedconf.autosync": {
+					"type": "boolean",
+					"default": false,
+					"description": "automatic updating keepalived-intellisense-DB for the runtime."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"test": "node ./test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^10.12.21",
+		"@types/vscode": "^1.38.0",
+		"eslint": "^5.13.0",
+		"glob": "^7.1.4",
+		"mocha": "^6.1.4",
+		"typescript": "^3.3.1",
+		"vscode-test": "^1.2.0"
+	},
+	"dependencies": {
+		"cheerio": "^1.0.0-rc.3",
+		"request": "^2.88.0"
+	}
+}

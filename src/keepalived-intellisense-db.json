@@ -1,0 +1,134 @@
+[
+	{
+		"name": "global_defs",
+		"syntax": [
+			"global_defs { ... }"
+		],
+		"default": null,
+		"contexts": [
+			"main"
+		],
+		"desc": "Global definitions configuration block."
+	},
+	{
+		"name": "router_id",
+		"syntax": [
+			"router_id <STRING>"
+		],
+		"default": "router_id id_0",
+		"contexts": [
+			"global_defs"
+		],
+		"desc": "String identifying the machine (doesn't have to be hostname). \n(default: local host name)"
+	},
+	{
+		"name": "vrrp_instance",
+		"syntax": [
+			"vrrp_instance <STRING> { ... }"
+		],
+		"default": null,
+		"contexts": [
+			"main"
+		],
+		"desc": "A VRRP Instance is the VRRP protocol key feature. It defines  and  configures  VRRP  behaviour  to  run  on  a  specific interface. Each VRRP Instances are related to a uniq interface."
+	},
+	{
+		"name": "state",
+		"syntax": [
+			"state MASTER|BACKUP"
+		],
+		"default": "state MASTER",
+		"contexts": [
+			"vrrp_instance"
+		],
+		"desc": "Initial state, MASTER|BACKUP \nAs soon as the other machine(s) come up, an election will be held and the machine with the highest priority will become MASTER. So the entry here doesn't matter a whole lot."
+	},
+	{
+		"name": "interface",
+		"syntax": [
+			"interface <eth0>"
+		],
+		"default": null,
+		"contexts": [
+			"vrrp_instance"
+		],
+		"desc": "interface for inside_network, bound by vrrp"
+	},
+	{
+		"name": "virtual_router_id",
+		"syntax": [
+			"virtual_router_id <NUMBER>"
+		],
+		"default": "virtual_router_id 51",
+		"contexts": [
+			"vrrp_instance"
+		],
+		"desc": "arbitrary unique number from 0 to 255, used to differentiate multiple instances of vrrpd, running on the same NIC (and hence same socket)."
+	},
+	{
+		"name": "priority",
+		"syntax": [
+			"priority <NUMBER>"
+		],
+		"default": "priority 100",
+		"contexts": [
+			"vrrp_instance"
+		],
+		"desc": "for electing MASTER, highest priority wins. to be MASTER, make this 50 more than on other machines."
+	},
+	{
+		"name": "advert_int",
+		"syntax": [
+			"advert_int <NUMBER>"
+		],
+		"default": "advert_int 1",
+		"contexts": [
+			"vrrp_instance"
+		],
+		"desc": "VRRP Advert interval in seconds (e.g. 0.92) (use default)."
+	},
+	{
+		"name": "authentication",
+		"syntax": [
+			"advert_int { ... }"
+		],
+		"default": null,
+		"contexts": [
+			"vrrp_instance"
+		],
+		"desc": "Note: authentication was removed from the VRRPv2 specification by RFC3768 in 2004. Use of this option is non-compliant and can cause problems; avoid using if possible, except when using unicast, where it can be helpful."
+	},
+	{
+		"name": "auth_type",
+		"syntax": [
+			"auth_type PASS|AH"
+		],
+		"default": "auth_type PASS",
+		"contexts": [
+			"authentication"
+		],
+        "desc": "Authentication type\nPASS - Simple password (suggested) \nAH - IPSEC (not recommended))."
+	},
+	{
+		"name": "auth_pass",
+		"syntax": [
+			"auth_pass <STRING>"
+		],
+		"default": "auth_pass 1234",
+		"contexts": [
+			"authentication"
+		],
+        "desc": "Password for accessing vrrpd. should be the same on all machines. Only the first eight (8) characters are used."
+	},
+	{
+		"name": "virtual_ipaddress",
+		"syntax": [
+			"virtual_ipaddress { ... }"
+		],
+		"default": null,
+		"contexts": [
+			"vrrp_instance"
+		],
+        "desc": "addresses add|del on change to MASTER, to BACKUP.\nWith the same entries on other machines, the opposite transition will be occurring. For virutal_ipaddress, virtual_ipaddress_excluded, virtual_routes and virtual_rules most of the options match the options of the command ip address/route/rule add. The track_group option only applies to static addresses/routes/rules. no_track is specific to keepalived and means that the vrrp_instance will not transition out of master state if the address/route/rule is deleted and the address/route/rule will not be reinstated until the vrrp instance next transitions to master.\n<LABEL>: is optional and creates a name for the alias.\n        For compatibility with \"ifconfig\", it should\n        be of the form <realdev>:<anytext>, for example\n        eth0:1 for an alias on eth0.\n <SCOPE>: (\"site\"|\"link\"|\"host\"|\"nowhere\"|\"global\").\n<IPADDR>[/<MASK>] [brd <IPADDR>] [dev <STRING>] [scope <SCOPE>]\n    [label <LABEL>] [peer <IPADDR>] [home]\n    [-nodad] [mngtmpaddr] [noprefixroute]\n    [autojoin] [no_track]\n192.168.200.17/24 dev eth1\n192.168.200.18/24 dev eth2 label eth2:1"
+	}
+]
